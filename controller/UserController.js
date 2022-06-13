@@ -2,7 +2,7 @@ const user = require('../models/user');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
-const {authSchema} = require('../helpers/validation_schema');
+const {authSchema, loginSchema} = require('../helpers/validation_schema');
 const createError = require('http-errors');
 const Joi = require('@hapi/joi');
 const config = require('../config/auth.config');
@@ -199,14 +199,27 @@ const registerUserValidator = (event) => {
             console.log(error.message);
         }
     } catch (error) {
-        //console.log(error);
-    }
-    
-  
-    
+        console.log(error);
+    }  
 };
 
 const login = async(req, resp, next) => {
+    //console.log(req.body);
+    //Validation
+    if(!req) console.log("400");
+    const { email, password } = req.body;
+    try {
+        const { error } = loginSchema.validate({
+            email,
+            password,
+          });
+        if(error){
+            console.log(error.message);
+        }
+    } catch (error) {
+        console.log(error);
+    } 
+
     user.findOne({email: req.body.email}).then(result=>{
         //console.log(result);
 

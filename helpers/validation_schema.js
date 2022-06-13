@@ -7,6 +7,12 @@ const authSchema = Joi.object().keys({
     password: Joi.string().min(8).max(20).required()
 });
 
+const loginSchema = Joi.object().keys({
+    email: Joi.string().lowercase().required().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+    password: Joi.string().min(8).max(20).required()
+});
+
 module.exports = {
-    authSchema
+    authSchema,
+    loginSchema
 }
